@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Tag, Anime, Movie, Anime, Manga
+from .models import Tag, Anime, Anime
 import json
 from .serializers import AnimeSerializer
 from rest_framework import status
@@ -72,15 +72,3 @@ def delete_anime(request, anime_id):
         return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_404_NOT_FOUND)
     except Exception:
         return JsonResponse({'error': 'Something went wrong'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-def tags(request):
-    data = list(Tag.objects.values())
-    return JsonResponse(data, safe=False)
-
-def movies(request):
-    data = list(Movie.objects.values())
-    return JsonResponse(data, safe=False)
-
-def mangas(request):
-    data = list(Manga.objects.values())
-    return JsonResponse(data, safe=False)
