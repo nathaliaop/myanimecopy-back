@@ -42,9 +42,6 @@ def create_anime(request):
         for i in payload["genres"]:
             anime.genres.add(i)
 
-        for i in payload["profiles"]:
-            anime.profiles.add(i)
-
         serializer = AnimeSerializer(anime)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
     except ObjectDoesNotExist as e:

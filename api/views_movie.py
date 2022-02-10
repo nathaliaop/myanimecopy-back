@@ -43,9 +43,6 @@ def create_movie(request):
 
         for i in payload["genres"]:
             movie.genres.add(i)
-        
-        for i in payload["profiles"]:
-            movie.profiles.add(i)
 
         serializer = MovieSerializer(movie)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)

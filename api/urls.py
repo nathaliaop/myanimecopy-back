@@ -2,7 +2,7 @@ from django.urls import path
 from . import views_favorite, views_social, views_profile, views_user, views_tag, views_movie, views_anime, views_manga, views_genre, views_chapter, views_season, views_episode
 
 urlpatterns = [
-    path('tags/create', views_tag.create_tag),
+    path('tags', views_tag.create_tag),
     path('tags/update', views_tag.update_tag),
     path('tags', views_tag.index_tag),
     path('tags/<int:tag_id>', views_tag.get_tag),

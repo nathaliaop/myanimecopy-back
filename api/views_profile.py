@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Profile
+from .models import Profile, Manga
 from django.contrib.auth.models import User
 import json
 from .serializers import ProfileSerializer
@@ -36,6 +36,13 @@ def create_profile(request):
             image=payload["image"],
             #added_by=user,
         )
+
+        for manga in payload["mangas"]:
+            profile.mangas.add(manga["id"])
+            add_manga = Manga.objects.filter(id=manga["id"])
+            add_manga.update(tag=manga["tag"])
+            
+
 
         serializer = ProfileSerializer(profile)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)

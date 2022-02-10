@@ -42,20 +42,20 @@ class GenreSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = ['id', 'profiles', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        fields = ['id', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
         depth = 2
 
 class AnimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Anime
-        fields = ['id', 'profiles', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        fields = ['id', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
         depth = 2
 
 class MangaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manga
-        fields = ['id', 'profiles', 'genres', 'tag', 'author', 'title', 'description', 'release_date', 'image']
+        fields = ['id', 'genres', 'tag', 'author', 'title', 'description', 'release_date', 'image']
         depth = 2
 
 class ChapterSerializer(serializers.ModelSerializer):
