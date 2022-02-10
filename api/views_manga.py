@@ -43,6 +43,9 @@ def create_manga(request):
         for i in payload["genres"]:
             manga.genres.add(i)
 
+        for i in payload["profiles"]:
+            manga.profiles.add(i)
+
         serializer = MangaSerializer(manga)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
     except ObjectDoesNotExist as e:

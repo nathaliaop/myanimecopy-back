@@ -1,5 +1,18 @@
 from rest_framework import serializers
-from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode
+from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode, Profile
+from django.contrib.auth.models import User
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 'user', 'image', 'animes', 'movies', 'mangas']
+        depth = 1
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        depth = 1
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,27 +24,27 @@ class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Genre
-        fields = ['id', 'name', 'animes']
+        fields = ['id', 'name', 'animes', 'movies', 'mangas']
         depth = 1
 
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = ['id', 'tag', 'genres', 'studio', 'director', 'title', 'description', 'release_date', 'image']
-        depth = 1
+        fields = ['id', 'profiles', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        depth = 2
 
 class AnimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Anime
-        fields = ['id', 'tag', 'genres', 'studio', 'director', 'title', 'description', 'release_date', 'image']
-        depth = 1
+        fields = ['id', 'profiles', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        depth = 2
 
 class MangaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manga
-        fields = ['id', 'tag', 'genres', 'author', 'title', 'description', 'release_date', 'image']
-        depth = 1
+        fields = ['id', 'profiles', 'genres', 'tag', 'author', 'title', 'description', 'release_date', 'image']
+        depth = 2
 
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:

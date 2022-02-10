@@ -1,9 +1,10 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Anime, Tag
+from .models import Profile
+from django.contrib.auth.models import User
 import json
-from .serializers import AnimeSerializer
+from .serializers import ProfileSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,43 +12,32 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 
 @api_view(["GET"])
-def get_anime(request, anime_id):
+def get_profile(request, profile_id):
     #user = request.user.id
-    anime = Anime.objects.get(id=anime_id)
-    serializer = AnimeSerializer(anime)
+    profile = Profile.objects.get(id=profile_id)
+    serializer = ProfileSerializer(profile)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
-def index_anime(request):
+def index_profile(request):
     #user = request.user.id
-    animes = Anime.objects#.filter(added_by=user)
-    serializer = AnimeSerializer(animes, many=True)
+    profiles = Profile.objects#.filter(added_by=user)
+    serializer = ProfileSerializer(profiles, many=True)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
-def create_anime(request):
+def create_profile(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
-        tag = Tag.objects.get(id=payload["tag"])
-        anime = Anime.objects.create(
-            tag=tag,
-            studio=payload["studio"],
-            director=payload["director"],
-            title=payload["title"],
-            description=payload["description"],
-            release_date=payload["release_date"],
+        user = User.objects.get(id=payload["user"])
+        profile = Profile.objects.create(
+            user=user,
             image=payload["image"],
             #added_by=user,
         )
 
-        for i in payload["genres"]:
-            anime.genres.add(i)
-
-        for i in payload["profiles"]:
-            anime.profiles.add(i)
-
-        serializer = AnimeSerializer(anime)
+        serializer = ProfileSerializer(profile)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_404_NOT_FOUND)
@@ -55,15 +45,15 @@ def create_anime(request):
         return JsonResponse({'error': 'Algo deu errado'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(["PUT"])
-def update_anime(request, anime_id):
+def update_profile(request, profile_id):
     # user = request.user.id
     payload = json.loads(request.body)
     try:
-        anime_item = Anime.objects.filter(id=anime_id)
+        profile_item = Profile.objects.filter(id=profile_id)
         # returns 1 or 0
-        anime_item.update(**payload)
-        anime = Anime.objects.get(id=anime_id)
-        serializer = AnimeSerializer(anime)
+        profile_item.update(**payload)
+        profile = Profile.objects.get(id=profile_id)
+        serializer = ProfileSerializer(profile)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_404_NOT_FOUND)
@@ -71,11 +61,11 @@ def update_anime(request, anime_id):
         return JsonResponse({'error': 'Something terrible went wrong'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(["DELETE"])
-def delete_anime(request, anime_id):
+def delete_profile(request, profile_id):
     #user = request.user.id
     try:
-        anime = Anime.objects.get(id=anime_id)
-        anime.delete()
+        profile = Profile.objects.get(id=profile_id)
+        profile.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_404_NOT_FOUND)

@@ -1,6 +1,19 @@
 from rest_framework import viewsets
-from .models import Tag, Genre, Movie, Anime, Manga, Chapter, Season, Episode
-from api.serializers import TagSerializer, GenreSerializer, MovieSerializer, AnimeSerializer, MangaSerializer, ChapterSerializer, SeasonSerializer, EpisodeSerializer
+from .models import Tag, Genre, Movie, Anime, Manga, Chapter, Season, Episode, Profile
+from django.contrib.auth.models import User
+from api.serializers import ProfileSerializer, UserSerializer, TagSerializer, GenreSerializer, MovieSerializer, AnimeSerializer, MangaSerializer, ChapterSerializer, SeasonSerializer, EpisodeSerializer
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return Profile.objects.all()
+
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.all()
 
 class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
