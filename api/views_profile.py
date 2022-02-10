@@ -30,7 +30,14 @@ def create_profile(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
-        user = User.objects.get(id=payload["user"])
+
+        user = User.objects.create(
+            username=payload["username"],
+            password=payload["password"],
+            email=payload["email"],
+            #added_by=user,
+        )
+
         profile = Profile.objects.create(
             user=user,
             image=payload["image"],

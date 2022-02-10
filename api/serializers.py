@@ -1,12 +1,5 @@
 from rest_framework import serializers
 from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode, Profile, Favorite, Social
-from django.contrib.auth.models import User
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password']
-        depth = 1
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:

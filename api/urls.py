@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views_favorite, views_social, views_profile, views_user, views_tag, views_movie, views_anime, views_manga, views_genre, views_chapter, views_season, views_episode
+from . import views_favorite, views_social, views_profile, views_tag, views_movie, views_anime, views_manga, views_genre, views_chapter, views_season, views_episode
 
 urlpatterns = [
     path('tags', views_tag.create_tag),
@@ -57,13 +57,6 @@ urlpatterns = [
     path('episodes/<int:episode_id>', views_episode.get_episode),
     path('episodes/update/<int:episode_id>', views_episode.update_episode),
     path('episodes/delete/<int:episode_id>', views_episode.delete_episode),
-
-    path('users/create', views_user.create_user),
-    path('users/update', views_user.update_user),
-    path('users', views_user.index_user),
-    path('users/<int:user_id>', views_user.get_user),
-    path('users/update/<int:user_id>', views_user.update_user),
-    path('users/delete/<int:user_id>', views_user.delete_user),
 
     path('profiles/create', views_profile.create_profile),
     path('profiles/update', views_profile.update_profile),
