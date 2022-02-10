@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Tag, Anime, Genre
+from .models import Anime, Tag
 import json
 from .serializers import AnimeSerializer
 from rest_framework import status

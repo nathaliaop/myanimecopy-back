@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Movie
+from .models import Movie, Tag
 import json
 from .serializers import MovieSerializer
 from rest_framework import status
@@ -31,13 +31,19 @@ def create_movie(request):
     try:
         tag = Tag.objects.get(id=payload["tag"])
         movie = Movie.objects.create(
+            tag=tag,
+            studio=payload["studio"],
+            director=payload["director"],
             title=payload["title"],
             description=payload["description"],
             release_date=payload["release_date"],
             image=payload["image"],
-            tag=tag,
             #added_by=user,
         )
+
+        for i in payload["genres"]:
+            movie.genres.add(i)
+
         serializer = MovieSerializer(movie)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
     except ObjectDoesNotExist as e:

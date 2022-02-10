@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Tag, Genre
+from .models import Genre
 import json
 from .serializers import GenreSerializer
 from rest_framework import status
