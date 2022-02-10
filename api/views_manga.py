@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Tag, Anime, Genre
+from .models import Manga
 import json
-from .serializers import AnimeSerializer
+from .serializers import MangaSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,40 +11,34 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 
 @api_view(["GET"])
-def get_anime(request, anime_id):
+def get_manga(request, manga_id):
     #user = request.user.id
-    anime = Anime.objects.get(id=anime_id)
-    serializer = AnimeSerializer(anime)
+    manga = Manga.objects.get(id=manga_id)
+    serializer = MangaSerializer(manga)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
-def index_anime(request):
+def index_manga(request):
     #user = request.user.id
-    animes = Anime.objects#.filter(added_by=user)
-    serializer = AnimeSerializer(animes, many=True)
+    mangas = Manga.objects#.filter(added_by=user)
+    serializer = MangaSerializer(mangas, many=True)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
-def create_anime(request):
+def create_manga(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
         tag = Tag.objects.get(id=payload["tag"])
-        anime = Anime.objects.create(
-            tag=tag,
-            studio=payload["studio"],
-            director=payload["director"],
+        manga = Manga.objects.create(
             title=payload["title"],
             description=payload["description"],
             release_date=payload["release_date"],
             image=payload["image"],
+            tag=tag,
             #added_by=user,
         )
-
-        for i in payload["genres"]:
-            anime.genres.add(i)
-
-        serializer = AnimeSerializer(anime)
+        serializer = MangaSerializer(manga)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_404_NOT_FOUND)
@@ -52,29 +46,29 @@ def create_anime(request):
         return JsonResponse({'error': 'Algo deu errado'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(["PUT"])
-def update_anime(request, anime_id):
+def update_manga(request, manga_id):
     # user = request.user.id
     payload = json.loads(request.body)
     try:
-        anime_item = Anime.objects.filter(id=anime_id)
+        manga_item = Manga.objects.filter(id=manga_id)
         # returns 1 or 0
-        anime_item.update(**payload)
-        anime = Anime.objects.get(id=anime_id)
-        serializer = AnimeSerializer(anime)
+        manga_item.update(**payload)
+        manga = Manga.objects.get(id=manga_id)
+        serializer = MangaSerializer(manga)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_404_NOT_FOUND)
     except Exception:
-        return JsonResponse({'error': 'Something terrible went wrong'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({'error': 'Algo deu errado'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(["DELETE"])
-def delete_anime(request, anime_id):
+def delete_manga(request, manga_id):
     #user = request.user.id
     try:
-        anime = Anime.objects.get(id=anime_id)
-        anime.delete()
+        manga = Manga.objects.get(id=manga_id)
+        manga.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_404_NOT_FOUND)
     except Exception:
-        return JsonResponse({'error': 'Something went wrong'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({'error': 'Algo deu errado'}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
