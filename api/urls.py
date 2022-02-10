@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views_tag, views_movie, views_anime, views_manga, views_genre, views_season, views_episode, views_chapter
+from . import views_tag, views_movie, views_anime, views_manga, views_genre, views_chapter, views_season, views_episode
 
 urlpatterns = [
     path('tags/create', views_tag.create_tag),
@@ -37,6 +37,13 @@ urlpatterns = [
     path('genres/update/<int:genre_id>', views_genre.update_genre),
     path('genres/delete/<int:genre_id>', views_genre.delete_genre),
 
+    path('chapters/create', views_chapter.create_chapter),
+    path('chapters/update', views_chapter.update_chapter),
+    path('chapters', views_chapter.index_chapter),
+    path('chapters/<int:chapter_id>', views_chapter.get_chapter),
+    path('chapters/update/<int:chapter_id>', views_chapter.update_chapter),
+    path('chapters/delete/<int:chapter_id>', views_chapter.delete_chapter),
+
     path('seasons/create', views_season.create_season),
     path('seasons/update', views_season.update_season),
     path('seasons', views_season.index_season),
@@ -50,11 +57,4 @@ urlpatterns = [
     path('episodes/<int:episode_id>', views_episode.get_episode),
     path('episodes/update/<int:episode_id>', views_episode.update_episode),
     path('episodes/delete/<int:episode_id>', views_episode.delete_episode),
-
-    path('chapters/create', views_chapter.create_chapter),
-    path('chapters/update', views_chapter.update_chapter),
-    path('chapters', views_chapter.index_chapter),
-    path('chapters/<int:chapter_id>', views_chapter.get_chapter),
-    path('chapters/update/<int:chapter_id>', views_chapter.update_chapter),
-    path('chapters/delete/<int:chapter_id>', views_chapter.delete_chapter),
 ]

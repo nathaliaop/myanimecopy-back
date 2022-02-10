@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Tag, Genre, Movie, Anime, Manga, Season, Episode, Chapter
-from api.serializers import TagSerializer, GenreSerializer, MovieSerializer, AnimeSerializer, MangaSerializer, SeasonSerializer, EpisodeSerializer, ChapterSerializer
+from .models import Tag, Genre, Movie, Anime, Manga, Chapter, Season, Episode
+from api.serializers import TagSerializer, GenreSerializer, MovieSerializer, AnimeSerializer, MangaSerializer, ChapterSerializer, SeasonSerializer, EpisodeSerializer
 
 class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
@@ -32,6 +32,12 @@ class MangaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Manga.objects.all()
 
+class ChapterViewSet(viewsets.ModelViewSet):
+    serializer_class = ChapterSerializer
+
+    def get_queryset(self):
+        return Chapter.objects.all()
+
 class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
 
@@ -43,9 +49,3 @@ class EpisodeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Episode.objects.all()
-
-class ChapterViewSet(viewsets.ModelViewSet):
-    serializer_class = ChapterSerializer
-
-    def get_queryset(self):
-        return Chapter.objects.all()

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Tag, Chapter
+from .models import Chapter, Manga
 import json
 from .serializers import ChapterSerializer
 from rest_framework import status
@@ -29,13 +29,11 @@ def create_chapter(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
-        tag = Tag.objects.get(id=payload["tag"])
+        manga = Manga.objects.get(id=payload["manga"])
         chapter = Chapter.objects.create(
-            title=payload["title"],
-            description=payload["description"],
-            release_date=payload["release_date"],
-            image=payload["image"],
-            tag=tag,
+            name=payload["name"],
+            number=payload["number"],
+            manga=manga,
             #added_by=user,
         )
         serializer = ChapterSerializer(chapter)

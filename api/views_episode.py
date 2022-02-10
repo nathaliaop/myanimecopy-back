@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Tag, Episode
+from .models import Episode, Season
 import json
 from .serializers import EpisodeSerializer
 from rest_framework import status
@@ -29,13 +29,10 @@ def create_episode(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
-        tag = Tag.objects.get(id=payload["tag"])
+        season = Season.objects.get(id=payload["season"])
         episode = Episode.objects.create(
-            title=payload["title"],
-            description=payload["description"],
-            release_date=payload["release_date"],
-            image=payload["image"],
-            tag=tag,
+            number=payload["number"],
+            season=season,
             #added_by=user,
         )
         serializer = EpisodeSerializer(episode)

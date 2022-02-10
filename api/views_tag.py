@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Tag, Tag
+from .models import Tag
 import json
 from .serializers import TagSerializer
 from rest_framework import status
@@ -29,13 +29,8 @@ def create_tag(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
-        tag = Tag.objects.get(id=payload["tag"])
         tag = Tag.objects.create(
-            title=payload["title"],
-            description=payload["description"],
-            release_date=payload["release_date"],
-            image=payload["image"],
-            tag=tag,
+            name=payload["name"],
             #added_by=user,
         )
         serializer = TagSerializer(tag)

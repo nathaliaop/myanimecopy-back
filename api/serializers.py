@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tag, Movie, Anime, Manga, Genre, Season, Episode, Chapter
+from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,17 +33,20 @@ class MangaSerializer(serializers.ModelSerializer):
         fields = ['id', 'tag', 'genres', 'author', 'title', 'description', 'release_date', 'image']
         depth = 1
 
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ['id', 'manga', 'name', 'number']
+        depth = 1
+
 class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Season
         fields = ['id', 'anime', 'number']
+        depth = 1
 
 class EpisodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Episode
         fields = ['id', 'season', 'name', 'number']
-
-class ChapterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chapter
-        fields = ['id', 'manga', 'name', 'number']
+        depth = 2
