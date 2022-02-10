@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tag, Genre, Movie, Anime, Manga, Season, Episode, Chapter
+from .models import Tag, Genre, Movie, Anime, Manga, Season, Episode, Chapter, Profile, Favorite, Social
 
 # Register your models here.
 admin.site.register(Tag)
@@ -10,3 +10,6 @@ admin.site.register(Manga)
 admin.site.register(Season)
 admin.site.register(Episode)
 admin.site.register(Chapter)
+admin.site.register(Profile)
+admin.site.register(Favorite)
+admin.site.register(Social)

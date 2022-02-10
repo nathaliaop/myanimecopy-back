@@ -7,7 +7,15 @@ class Profile(models.Model):
     image = models.ImageField(default="")
 
     def __str__(self):
-        return f'Profile {self.user.username}'
+        return f'Profile from {self.user.username}'
+
+class Social(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    followers = models.ManyToManyField(Profile, related_name='followers', blank=True)
+    following = models.ManyToManyField(Profile, related_name='following', blank=True)
+
+    def __str__(self):
+        return f'Social from {self.profile.user.username}'
 
 class Tag(models.Model):
     name = models.CharField(max_length=1000)
@@ -61,6 +69,15 @@ class Manga(models.Model):
 
     def __str__(self):
         return f'Manga {self.title}'
+
+class Favorite(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    animes = models.ManyToManyField(Anime, related_name='animes', blank=True)
+    movies = models.ManyToManyField(Movie, related_name='movies', blank=True)
+    mangas = models.ManyToManyField(Manga, related_name='mangas', blank=True)
+
+    def __str__(self):
+        return f'Favorites from {self.profile.user.username}'
 
 class Chapter(models.Model):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
