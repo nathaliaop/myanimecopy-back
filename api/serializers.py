@@ -8,7 +8,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class GenreSerializer(serializers.ModelSerializer):
     animes = serializers.SerializerMethodField(method_name='get_animes')
-    #animes = serializers.Field(source='get_animes')
+
     class Meta:
         model = Genre
         fields = ['id', 'name', 'animes']
@@ -23,9 +23,11 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = ['id', 'tag', 'genres', 'studio', 'director', 'title', 'description', 'release_date', 'image']
 
 class AnimeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Anime
         fields = ['id', 'tag', 'genres', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        depth = 1 #returns the fields of foreign key related objects up to depth 1, instead of just a foreign key value
 
 class MangaSerializer(serializers.ModelSerializer):
     class Meta:
