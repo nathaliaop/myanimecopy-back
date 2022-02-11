@@ -31,17 +31,18 @@ class AnimeSerializer(serializers.ModelSerializer):
         fields = ['id', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
         depth = 2
 
-class MangaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Manga
-        fields = ['id', 'genres', 'tag', 'author', 'title', 'description', 'release_date', 'image']
-        depth = 2
-
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
         fields = ['id', 'manga', 'name', 'number']
-        depth = 1
+        depth = 2
+
+class MangaSerializer(serializers.ModelSerializer):
+    chapters = ChapterSerializer(many=True)
+    class Meta:
+        model = Manga
+        fields = ['id', 'genres', 'chapters', 'tag', 'author', 'title', 'description', 'release_date', 'image']
+        depth = 2
 
 class SeasonSerializer(serializers.ModelSerializer):
     class Meta:

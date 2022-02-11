@@ -80,7 +80,7 @@ class Favorite(models.Model):
         return f'Favorites from {self.profile.user.username}'
 
 class Chapter(models.Model):
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
+    manga = models.ForeignKey(Manga, related_name="chapters", on_delete=models.CASCADE)
     name = models.CharField(max_length=1000)
     number = models.IntegerField()
 
