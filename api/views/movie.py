@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from ..models import Movie
+from api.models.movie import Movie
 import json
 from ..serializers import MovieSerializer
 from rest_framework import status

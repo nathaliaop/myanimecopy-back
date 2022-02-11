@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from ..models import Anime
+from api.models.anime import Anime
 import json
 from ..serializers import AnimeSerializer
 from rest_framework import status

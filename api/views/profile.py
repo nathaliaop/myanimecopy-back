@@ -1,7 +1,11 @@
 from django.shortcuts import render
 
 # Create your views here.
-from ..models import Profile, Manga, Anime, Movie, Favorite, Social
+from api.models.profile import Profile
+from api.models.manga import Manga
+from api.models.anime import Anime
+from api.models.movie import Movie
+from api.models.social import Social
 from django.contrib.auth.models import User
 import json
 from ..serializers import ProfileSerializer
@@ -94,7 +98,7 @@ def update_profile(request, profile_id):
             password=payload["password"],
         )
 
-        for profile in Profile.objects.filter(id=profile_id):
+        '''for profile in Profile.objects.filter(id=profile_id):
             for anime in payload["animes"]:
                 if (anime["delete"]):
                     profile.animes.remove(anime["id"])
@@ -144,7 +148,7 @@ def update_profile(request, profile_id):
                 else:
                     favorite.mangas.add(manga["id"])
                     add_manga = Manga.objects.filter(id=manga["id"])
-                    add_manga.update(tag=manga["tag"])
+                    add_manga.update(tag=manga["tag"])'''
 
         for social in Social.objects.filter(id=profile_id):
             for follower in payload["followers"]:

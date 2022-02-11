@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
-from ..models import Episode, Season
+from api.models.episode import Episode
+from api.models.season import Season
 import json
 from ..serializers import EpisodeSerializer
 from rest_framework import status

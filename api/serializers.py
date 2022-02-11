@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import Movie, Anime, Manga, Genre, Chapter, Season, Episode, Profile
+from api.models.movie import Movie
+from api.models.anime import Anime
+from api.models.manga import Manga
+from api.models.genre import Genre
+from api.models.chapter import Chapter
+from api.models.season import Season
+from api.models.episode import Episode
+from api.models.profile import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
