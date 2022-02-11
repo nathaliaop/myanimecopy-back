@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views_favorite, views_social, views_profile, views_tag, views_movie, views_anime, views_manga, views_genre, views_chapter, views_season, views_episode
+from . import views_profile, views_tag, views_movie, views_anime, views_manga, views_genre, views_chapter, views_season, views_episode
 
 urlpatterns = [
     path('tags/create', views_tag.create_tag),
@@ -64,18 +64,4 @@ urlpatterns = [
     path('profiles/<int:profile_id>', views_profile.get_profile),
     path('profiles/update/<int:profile_id>', views_profile.update_profile),
     path('profiles/delete/<int:profile_id>', views_profile.delete_profile),
-
-    path('favorites/create', views_favorite.create_favorite),
-    path('favorites/update', views_favorite.update_favorite),
-    path('favorites', views_favorite.index_favorite),
-    path('favorites/<int:favorite_id>', views_favorite.get_favorite),
-    path('favorites/update/<int:favorite_id>', views_favorite.update_favorite),
-    path('favorites/delete/<int:favorite_id>', views_favorite.delete_favorite),
-
-    path('socials/create', views_social.create_social),
-    path('socials/update', views_social.update_social),
-    path('socials', views_social.index_social),
-    path('socials/<int:social_id>', views_social.get_social),
-    path('socials/update/<int:social_id>', views_social.update_social),
-    path('socials/delete/<int:social_id>', views_social.delete_social),
 ]

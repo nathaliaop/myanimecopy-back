@@ -1,23 +1,11 @@
 from rest_framework import serializers
-from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode, Profile, Favorite, Social
+from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode, Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user', 'animes', 'movies', 'mangas', 'favorite', 'social']
         depth = 3
-
-class SocialSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Social
-        fields = ['id', 'followers', 'following']
-        depth = 2
-
-class FavoriteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Favorite
-        fields = ['profile', 'animes', 'movies', 'mangas']
-        depth = 2
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +17,7 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = ['id', 'name', 'animes', 'movies', 'mangas']
-        depth = 1
+        depth = 2
 
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
