@@ -3,8 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 from api.models.chapter import Chapter
 from api.models.manga import Manga
+from api.serializers.chapter import ChapterSerializer
 import json
-from ..serializers import ChapterSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist

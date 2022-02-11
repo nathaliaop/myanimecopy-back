@@ -3,8 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 from api.models.season import Season
 from api.models.anime import Anime
+from api.serializers.season import SeasonSerializer
 import json
-from ..serializers import SeasonSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist

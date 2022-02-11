@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 # Create your views here.
 from api.models.genre import Genre
+from api.serializers.genre import GenreSerializer
 import json
-from ..serializers import GenreSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist

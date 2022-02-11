@@ -7,8 +7,8 @@ from api.models.anime import Anime
 from api.models.movie import Movie
 from api.models.social import Social
 from django.contrib.auth.models import User
+from api.serializers.profile import ProfileSerializer
 import json
-from ..serializers import ProfileSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist
