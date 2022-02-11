@@ -4,13 +4,13 @@ from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode, P
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'user', 'animes', 'movies', 'mangas', 'favorite', 'following', 'followers']
-        depth = 1
+        fields = ['id', 'user', 'animes', 'movies', 'mangas', 'favorite', 'social']
+        depth = 3
 
 class SocialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Social
-        fields = ['id', 'profile', 'followers', 'following']
+        fields = ['id', 'followers', 'following']
         depth = 2
 
 class FavoriteSerializer(serializers.ModelSerializer):
@@ -26,7 +26,6 @@ class TagSerializer(serializers.ModelSerializer):
         depth = 1 # returns the fields of foreign key related objects up to depth 1, instead of just a foreign key value
 
 class GenreSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Genre
         fields = ['id', 'name', 'animes', 'movies', 'mangas']
@@ -39,7 +38,6 @@ class MovieSerializer(serializers.ModelSerializer):
         depth = 2
 
 class AnimeSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Anime
         fields = ['id', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']

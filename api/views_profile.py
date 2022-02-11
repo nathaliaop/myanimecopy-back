@@ -120,6 +120,42 @@ def update_profile(request, profile_id):
                     add_manga = Manga.objects.filter(id=manga["id"])
                     add_manga.update(tag=manga["tag"])
 
+        for favorite in Favorite.objects.filter(id=profile_id):
+            for anime in payload["favorite"]["animes"]:
+                if (anime["delete"]):
+                    favorite.animes.remove(anime["id"])
+                else:
+                    favorite.animes.add(anime["id"])
+                    add_anime = Anime.objects.filter(id=anime["id"])
+                    favorite.animes.add(anime["id"])
+                    add_anime.update(tag=anime["tag"])
+
+            for movie in payload["favorite"]["movies"]:
+                if (movie["delete"]):
+                    favorite.movies.remove(movie["id"])
+                else:
+                    favorite.movies.add(movie["id"])
+                    add_movie = Movie.objects.filter(id=movie["id"])
+                    add_movie.update(tag=movie["tag"])
+
+            for manga in payload["favorite"]["mangas"]:
+                if (manga["delete"]):
+                    favorite.mangas.remove(manga["id"])
+                else:
+                    favorite.mangas.add(manga["id"])
+                    add_manga = Manga.objects.filter(id=manga["id"])
+                    add_manga.update(tag=manga["tag"])
+
+        for social in Social.objects.filter(id=profile_id):
+            for follower in payload["followers"]:
+                if (follower["delete"]):
+                    social.following.remove(follower["id"])
+                    for remove_follower in Social.objects.filter(id=follower["id"]):
+                        remove_follower.followers.remove(social.id)
+                else:
+                    social.following.add(follower["id"])
+                    for add_follower in Social.objects.filter(id=follower["id"]):
+                        add_follower.followers.add(social.id)
 
         profile = Profile.objects.get(id=profile_id)
         serializer = ProfileSerializer(profile)
