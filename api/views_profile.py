@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Profile, Manga, Anime, Movie
+from .models import Profile, Manga, Anime, Movie, Favorite, Social
 from django.contrib.auth.models import User
 import json
 from .serializers import ProfileSerializer
@@ -44,7 +44,15 @@ def create_profile(request):
             #added_by=user,
         )
 
-        for manga in payload["mangas"]:
+        Social.objects.create(
+            profile=profile,
+        )
+
+        Favorite.objects.create(
+            profile=profile,
+        )
+
+        '''for manga in payload["mangas"]:
             profile.mangas.add(manga["id"])
             add_manga = Manga.objects.filter(id=manga["id"])
             add_manga.update(tag=manga["tag"])
@@ -57,7 +65,7 @@ def create_profile(request):
         for movie in payload["movies"]:
             profile.movies.add(movie["id"])
             add_movie = Movie.objects.filter(id=movie["id"])
-            add_movie.update(tag=movie["tag"])
+            add_movie.update(tag=movie["tag"])'''
 
         serializer = ProfileSerializer(profile)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
@@ -71,9 +79,48 @@ def update_profile(request, profile_id):
     # user = request.user.id
     payload = json.loads(request.body)
     try:
-        profile_item = Profile.objects.filter(id=profile_id)
+        profile = Profile.objects.filter(id=profile_id)
         # returns 1 or 0
-        profile_item.update(**payload)
+        user = User.objects.filter(id=profile_id)
+        favorite = Favorite.objects.filter(id=profile_id)
+
+        profile.update(
+            image=payload["image"],
+        )
+
+        user.update(
+            email=payload["email"],
+            username=payload["username"],
+            password=payload["password"],
+        )
+
+        for profile in Profile.objects.filter(id=profile_id):
+            for anime in payload["animes"]:
+                if (anime["delete"]):
+                    profile.animes.remove(anime["id"])
+                else:
+                    profile.animes.add(anime["id"])
+                    add_anime = Anime.objects.filter(id=anime["id"])
+                    profile.animes.add(anime["id"])
+                    add_anime.update(tag=anime["tag"])
+
+            for movie in payload["movies"]:
+                if (movie["delete"]):
+                    profile.movies.remove(movie["id"])
+                else:
+                    profile.movies.add(movie["id"])
+                    add_movie = Movie.objects.filter(id=movie["id"])
+                    add_movie.update(tag=movie["tag"])
+
+            for manga in payload["mangas"]:
+                if (manga["delete"]):
+                    profile.mangas.remove(manga["id"])
+                else:
+                    profile.mangas.add(manga["id"])
+                    add_manga = Manga.objects.filter(id=manga["id"])
+                    add_manga.update(tag=manga["tag"])
+
+
         profile = Profile.objects.get(id=profile_id)
         serializer = ProfileSerializer(profile)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)

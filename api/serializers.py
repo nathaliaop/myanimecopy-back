@@ -4,8 +4,8 @@ from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode, P
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'user', 'image', 'animes', 'movies', 'mangas', 'favorite', 'following', 'followers']
-        depth = 3
+        fields = ['id', 'user', 'animes', 'movies', 'mangas', 'favorite', 'following', 'followers']
+        depth = 1
 
 class SocialSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,7 +16,7 @@ class SocialSerializer(serializers.ModelSerializer):
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
-        fields = ['id', 'profile', 'animes', 'movies', 'mangas']
+        fields = ['profile', 'animes', 'movies', 'mangas']
         depth = 2
 
 class TagSerializer(serializers.ModelSerializer):
