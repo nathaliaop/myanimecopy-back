@@ -1,10 +1,10 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Profile, Manga, Anime, Movie, Favorite, Social
+from ..models import Profile, Manga, Anime, Movie, Favorite, Social
 from django.contrib.auth.models import User
 import json
-from .serializers import ProfileSerializer
+from ..serializers import ProfileSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist

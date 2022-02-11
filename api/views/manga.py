@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Manga, Tag
+from ..models import Manga, Tag
 import json
-from .serializers import MangaSerializer
+from ..serializers import MangaSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist
