@@ -1,18 +1,12 @@
 from rest_framework import viewsets
-from .models import Tag, Genre, Movie, Anime, Manga, Chapter, Season, Episode, Profile, Favorite, Social
-from api.serializers import ProfileSerializer, TagSerializer, GenreSerializer, MovieSerializer, AnimeSerializer, MangaSerializer, ChapterSerializer, SeasonSerializer, EpisodeSerializer
+from .models import Tag, Genre, Movie, Anime, Manga, Chapter, Season, Episode, Profile
+from api.serializers import ProfileSerializer, GenreSerializer, MovieSerializer, AnimeSerializer, MangaSerializer, ChapterSerializer, SeasonSerializer, EpisodeSerializer
 
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
         return Profile.objects.all()
-
-class TagViewSet(viewsets.ModelViewSet):
-    serializer_class = TagSerializer
-
-    def get_queryset(self):
-        return Tag.objects.all()
 
 class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = GenreSerializer

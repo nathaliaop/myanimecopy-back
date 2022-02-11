@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from ..models import Manga, Tag, Chapter
+from ..models import Manga, Chapter
 import json
 from ..serializers import MangaSerializer
 from rest_framework import status
@@ -29,9 +29,7 @@ def create_manga(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
-        tag = Tag.objects.get(id=payload["tag"])
         manga = Manga.objects.create(
-            tag=tag,
             author=payload["author"],
             title=payload["title"],
             description=payload["description"],

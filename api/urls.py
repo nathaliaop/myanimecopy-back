@@ -1,14 +1,8 @@
 from django.urls import path
 
-from .views import anime, chapter, episode, genre, manga, movie, profile, season, tag
+from .views import anime, chapter, episode, genre, manga, movie, profile, season
 
 urlpatterns = [
-    path('tags/create', tag.create_tag),
-    path('tags/update', tag.update_tag),
-    path('tags', tag.index_tag),
-    path('tags/<int:tag_id>', tag.get_tag),
-    path('tags/update/<int:tag_id>', tag.update_tag),
-    path('tags/delete/<int:tag_id>', tag.delete_tag),
 
     path('movies/create', movie.create_movie),
     path('movies/update', movie.update_movie),

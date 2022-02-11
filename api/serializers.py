@@ -1,17 +1,11 @@
 from rest_framework import serializers
-from .models import Tag, Movie, Anime, Manga, Genre, Chapter, Season, Episode, Profile
+from .models import Movie, Anime, Manga, Genre, Chapter, Season, Episode, Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user', 'animes', 'movies', 'mangas', 'favorite', 'social']
-        depth = 3
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ['id', 'name']
-        depth = 1 # returns the fields of foreign key related objects up to depth 1, instead of just a foreign key value
+        depth = 3 # returns the fields of foreign key related objects up to depth 1, instead of just a foreign key value
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,13 +16,13 @@ class GenreSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = ['id', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        fields = ['id', 'genres', 'studio', 'director', 'title', 'description', 'release_date', 'image']
         depth = 2
 
 class AnimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anime
-        fields = ['id', 'genres', 'tag', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        fields = ['id', 'genres', 'studio', 'director', 'title', 'description', 'release_date', 'image']
         depth = 2
 
 class ChapterSerializer(serializers.ModelSerializer):
@@ -41,7 +35,7 @@ class MangaSerializer(serializers.ModelSerializer):
     chapters = ChapterSerializer(many=True)
     class Meta:
         model = Manga
-        fields = ['id', 'genres', 'chapters', 'tag', 'author', 'title', 'description', 'release_date', 'image']
+        fields = ['id', 'genres', 'chapters', 'author', 'title', 'description', 'release_date', 'image']
         depth = 2
 
 class SeasonSerializer(serializers.ModelSerializer):

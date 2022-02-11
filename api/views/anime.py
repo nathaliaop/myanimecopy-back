@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from ..models import Anime, Tag
+from ..models import Anime
 import json
 from ..serializers import AnimeSerializer
 from rest_framework import status
@@ -27,9 +27,7 @@ def create_anime(request):
     # user = request.user
     payload = json.loads(request.body)
     try:
-        tag = Tag.objects.get(id=payload["tag"])
         anime = Anime.objects.create(
-            tag=tag,
             studio=payload["studio"],
             director=payload["director"],
             title=payload["title"],
