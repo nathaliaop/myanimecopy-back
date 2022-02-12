@@ -99,9 +99,9 @@ def update_profile(request, profile_id):
                 else:
                     profile.animes.add(anime["id"])
                     add_anime = Anime.objects.filter(id=anime["id"])
-                    profile.animes.add(anime["id"])
-                    add_anime.update(tag=anime["tag"])
+                    #add_anime.update(tag=anime["tag"])
 
+            
             for movie in payload["movies"]:
                 if (movie["delete"]):
                     profile.movies.remove(movie["id"])
@@ -115,32 +115,6 @@ def update_profile(request, profile_id):
                     profile.mangas.remove(manga["id"])
                 else:
                     profile.mangas.add(manga["id"])
-                    add_manga = Manga.objects.filter(id=manga["id"])
-                    add_manga.update(tag=manga["tag"])
-
-        for favorite in Favorite.objects.filter(id=profile_id):
-            for anime in payload["favorite"]["animes"]:
-                if (anime["delete"]):
-                    favorite.animes.remove(anime["id"])
-                else:
-                    favorite.animes.add(anime["id"])
-                    add_anime = Anime.objects.filter(id=anime["id"])
-                    favorite.animes.add(anime["id"])
-                    add_anime.update(tag=anime["tag"])
-
-            for movie in payload["favorite"]["movies"]:
-                if (movie["delete"]):
-                    favorite.movies.remove(movie["id"])
-                else:
-                    favorite.movies.add(movie["id"])
-                    add_movie = Movie.objects.filter(id=movie["id"])
-                    add_movie.update(tag=movie["tag"])
-
-            for manga in payload["favorite"]["mangas"]:
-                if (manga["delete"]):
-                    favorite.mangas.remove(manga["id"])
-                else:
-                    favorite.mangas.add(manga["id"])
                     add_manga = Manga.objects.filter(id=manga["id"])
                     add_manga.update(tag=manga["tag"])'''
 
