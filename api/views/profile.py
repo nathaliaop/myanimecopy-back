@@ -5,6 +5,7 @@ from api.models.manga import Manga
 from api.models.anime import Anime
 from api.models.movie import Movie
 from api.models.social import Social
+from api.models.status import Status
 from django.contrib.auth.models import User
 from api.serializers.profile import ProfileSerializer
 import json
@@ -92,17 +93,23 @@ def update_profile(request, profile_id):
             password=payload["password"],
         )
 
-        '''for profile in Profile.objects.filter(id=profile_id):
+        for profile in Profile.objects.filter(id=profile_id):
             for anime in payload["animes"]:
                 if (anime["delete"]):
                     profile.animes.remove(anime["id"])
                 else:
-                    profile.animes.add(anime["id"])
-                    add_anime = Anime.objects.filter(id=anime["id"])
+                    Status.objects.create(
+                        profile=profile,
+                        anime=Anime.objects.get(id=anime["id"]),
+                        favorite=False,
+                        progress=100,
+                    )
+                    #profile.animes.add(anime["id"])
+                    #add_anime = Anime.objects.filter(id=anime["id"])
                     #add_anime.update(tag=anime["tag"])
 
             
-            for movie in payload["movies"]:
+            '''for movie in payload["movies"]:
                 if (movie["delete"]):
                     profile.movies.remove(movie["id"])
                 else:
