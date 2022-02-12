@@ -1,10 +1,8 @@
 from django.db import models
-from api.models.profile import Profile
 from api.models.genre import Genre
 import datetime
 
 class Movie(models.Model):
-    profiles = models.ManyToManyField(Profile, related_name='movies', blank=True)
     genres = models.ManyToManyField(Genre, related_name='movies', blank=True)
     studio = models.CharField(max_length=1000)
     director = models.CharField(max_length=1000)
