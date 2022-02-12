@@ -101,8 +101,8 @@ def update_profile(request, profile_id):
                     Status.objects.create(
                         profile=profile,
                         anime=Anime.objects.get(id=anime["id"]),
-                        favorite=False,
-                        progress=100,
+                        favorite=anime["favorite"],
+                        progress=anime["progress"],
                     )
                     #profile.animes.add(anime["id"])
                     #add_anime = Anime.objects.filter(id=anime["id"])
