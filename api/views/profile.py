@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 # Create your views here.
 from api.models.profile import Profile
 from api.models.manga import Manga
@@ -52,10 +51,6 @@ def create_profile(request):
             profile=profile,
         )
 
-        Favorite.objects.create(
-            profile=profile,
-        )
-
         '''for manga in payload["mangas"]:
             profile.mangas.add(manga["id"])
             add_manga = Manga.objects.filter(id=manga["id"])
@@ -86,7 +81,6 @@ def update_profile(request, profile_id):
         profile = Profile.objects.filter(id=profile_id)
         # returns 1 or 0
         user = User.objects.filter(id=profile_id)
-        favorite = Favorite.objects.filter(id=profile_id)
 
         profile.update(
             image=payload["image"],

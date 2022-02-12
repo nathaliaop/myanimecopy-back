@@ -1,4 +1,3 @@
-from telnetlib import STATUS
 from .anime import Anime
 from .chapter import Chapter
 from .episode import Episode
