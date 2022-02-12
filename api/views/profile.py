@@ -96,7 +96,8 @@ def update_profile(request, profile_id):
         for profile in Profile.objects.filter(id=profile_id):
             for anime in payload["animes"]:
                 if (anime["delete"]):
-                    profile.animes.remove(anime["id"])
+                    for remove_status in Status.objects.filter(profile=profile.id, anime=anime["id"]):
+                        remove_status.delete()
                 else:
                     Status.objects.create(
                         profile=profile,
