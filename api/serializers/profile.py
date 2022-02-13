@@ -11,4 +11,4 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user', 'animestatus', 'mangastatus', 'moviestatus', 'social']
-        depth = 3 # returns the fields of foreign key related objects up to depth 1, instead of just a foreign key value
+        depth = 3

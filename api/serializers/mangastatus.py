@@ -5,4 +5,4 @@ class MangaStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = MangaStatus
         fields = ['id', 'favorite', 'progress', 'manga']
-        depth = 3 # returns the fields of foreign key related objects up to depth 1, instead of just a foreign key value
+        depth = 3
