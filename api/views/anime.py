@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from api.models.anime import Anime
+from api.models.season import Season
 from api.serializers.anime import AnimeSerializer
 import json
 from rest_framework import status
@@ -37,8 +38,14 @@ def create_anime(request):
             #added_by=user,
         )
 
-        for i in payload["genres"]:
-            anime.genres.add(i)
+        for season in payload["seasons"]:
+            Season.objects.create(
+                anime=anime,
+                number=season["number"],
+            )
+
+        for genre in payload["genres"]:
+            anime.genres.add(genre)
 
         serializer = AnimeSerializer(anime)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)

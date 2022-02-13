@@ -4,5 +4,5 @@ from api.models.chapter import Chapter
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
-        fields = ['id', 'manga', 'name', 'number']
+        fields = ['id', 'name', 'number']
         depth = 2
