@@ -10,5 +10,5 @@ class ProfileSerializer(serializers.ModelSerializer):
     moviestatus = MovieStatusSerializer(many=True)
     class Meta:
         model = Profile
-        fields = ['id', 'user', 'animestatus', 'mangastatus', 'moviestatus', 'social']
+        fields = ['id', 'user', 'image', 'animestatus', 'mangastatus', 'moviestatus', 'social']
         depth = 3
