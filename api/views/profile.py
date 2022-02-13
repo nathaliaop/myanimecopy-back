@@ -17,21 +17,18 @@ from rest_framework.response import Response
 
 @api_view(["GET"])
 def get_profile(request, profile_id):
-    #user = request.user.id
     profile = Profile.objects.get(id=profile_id)
     serializer = ProfileSerializer(profile)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 def index_profile(request):
-    #user = request.user.id
-    profiles = Profile.objects#.filter(added_by=user)
+    profiles = Profile.objects
     serializer = ProfileSerializer(profiles, many=True)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
 def create_profile(request):
-    # user = request.user
     payload = json.loads(request.body)
     try:
 
@@ -39,33 +36,16 @@ def create_profile(request):
             username=payload["username"],
             password=payload["password"],
             email=payload["email"],
-            #added_by=user,
         )
 
         profile = Profile.objects.create(
             user=user,
             image=payload["image"],
-            #added_by=user,
         )
 
         Social.objects.create(
             profile=profile,
         )
-
-        '''for manga in payload["mangas"]:
-            profile.mangas.add(manga["id"])
-            add_manga = Manga.objects.filter(id=manga["id"])
-            add_manga.update(tag=manga["tag"])
-            
-        for anime in payload["animes"]:
-            profile.animes.add(anime["id"])
-            add_anime = Anime.objects.filter(id=anime["id"])
-            add_anime.update(tag=anime["tag"])
-
-        for movie in payload["movies"]:
-            profile.movies.add(movie["id"])
-            add_movie = Movie.objects.filter(id=movie["id"])
-            add_movie.update(tag=movie["tag"])'''
 
         serializer = ProfileSerializer(profile)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
@@ -76,11 +56,9 @@ def create_profile(request):
 
 @api_view(["PUT"])
 def update_profile(request, profile_id):
-    # user = request.user.id
     payload = json.loads(request.body)
     try:
         profile = Profile.objects.filter(id=profile_id)
-        # returns 1 or 0
         user = User.objects.filter(id=profile_id)
 
         profile.update(
@@ -105,26 +83,28 @@ def update_profile(request, profile_id):
                         favorite=anime["favorite"],
                         progress=anime["progress"],
                     )
-                    #profile.animes.add(anime["id"])
-                    #add_anime = Anime.objects.filter(id=anime["id"])
-                    #add_anime.update(tag=anime["tag"])
-
-            
-            '''for movie in payload["movies"]:
+            for movie in payload["movies"]:
                 if (movie["delete"]):
-                    profile.movies.remove(movie["id"])
+                    for remove_status in Status.objects.filter(profile=profile.id, movie=movie["id"]):
+                        remove_status.delete()
                 else:
-                    profile.movies.add(movie["id"])
-                    add_movie = Movie.objects.filter(id=movie["id"])
-                    add_movie.update(tag=movie["tag"])
-
+                    Status.objects.create(
+                        profile=profile,
+                        movie=Movie.objects.get(id=movie["id"]),
+                        favorite=movie["favorite"],
+                        progress=movie["progress"],
+                    )
             for manga in payload["mangas"]:
                 if (manga["delete"]):
-                    profile.mangas.remove(manga["id"])
+                    for remove_status in Status.objects.filter(profile=profile.id, manga=manga["id"]):
+                        remove_status.delete()
                 else:
-                    profile.mangas.add(manga["id"])
-                    add_manga = Manga.objects.filter(id=manga["id"])
-                    add_manga.update(tag=manga["tag"])'''
+                    Status.objects.create(
+                        profile=profile,
+                        manga=Manga.objects.get(id=manga["id"]),
+                        favorite=manga["favorite"],
+                        progress=manga["progress"],
+                    )
 
         for social in Social.objects.filter(id=profile_id):
             for follower in payload["followers"]:
