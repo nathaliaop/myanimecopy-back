@@ -79,35 +79,36 @@ def update_profile(request, profile_id):
             password=payload["password"],
         )
 
+        profile = Profile.objects.get(id=profile_id)
         for anime in payload["animes"]:
             if (anime["delete"]):
-                for remove_status in AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"]):
-                    remove_status.delete()
+                remove_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
+                remove_status.delete()
             else:
                 AnimeStatus.objects.create(
-                    profile = Profile.objects.get(id=profile_id),
+                    profile = profile,
                     anime=Anime.objects.get(id=anime["id"]),
                     favorite=anime["favorite"],
                     progress=anime["progress"],
                 )
         for movie in payload["movies"]:
             if (movie["delete"]):
-                for remove_status in MovieStatus.objects.filter(profile=profile.id, movie=movie["id"]):
-                    remove_status.delete()
+                remove_status = MovieStatus.objects.get(profile=profile.id, movie=movie["id"])
+                remove_status.delete()
             else:
                 MovieStatus.objects.create(
-                    profile = Profile.objects.get(id=profile_id),
+                    profile = profile,
                     movie=Movie.objects.get(id=movie["id"]),
                     favorite=movie["favorite"],
                     progress=movie["progress"],
                 )
         for manga in payload["mangas"]:
             if (manga["delete"]):
-                for remove_status in MangaStatus.objects.filter(profile=profile.id, manga=manga["id"]):
-                    remove_status.delete()
+                remove_status = MangaStatus.objects.get(profile=profile.id, manga=manga["id"])
+                remove_status.delete()
             else:
                 mangastatus = MangaStatus.objects.create(
-                    profile = Profile.objects.get(id=profile_id),
+                    profile = profile,
                     manga=Manga.objects.get(id=manga["id"]),
                     favorite=manga["favorite"],
                     progress=manga["progress"],
