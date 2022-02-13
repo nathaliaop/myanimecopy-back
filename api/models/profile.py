@@ -7,9 +7,9 @@ from api.models.manga import Manga
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(default="")
-    movies = models.ManyToManyField(Movie, through="Status")
-    animes = models.ManyToManyField(Anime, through="Status")
-    mangas = models.ManyToManyField(Manga, through="Status")
+    movies = models.ManyToManyField(Movie, through="MovieStatus")
+    animes = models.ManyToManyField(Anime, through="AnimeStatus")
+    mangas = models.ManyToManyField(Manga, through="MangaStatus")
 
     def __str__(self):
         return f'Profile from {self.user.username}'

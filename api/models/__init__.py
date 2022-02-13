@@ -7,4 +7,6 @@ from .movie import Movie
 from .profile import Profile
 from .season import Season
 from .social import Social
-from .status import Status
+from .animestatus import AnimeStatus
+from .mangastatus import MangaStatus
+from .moviestatus import MovieStatus

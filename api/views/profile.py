@@ -5,7 +5,9 @@ from api.models.manga import Manga
 from api.models.anime import Anime
 from api.models.movie import Movie
 from api.models.social import Social
-from api.models.status import Status
+from api.models.animestatus import AnimeStatus
+from api.models.mangastatus import MangaStatus
+from api.models.moviestatus import MovieStatus
 from django.contrib.auth.models import User
 from api.serializers.profile import ProfileSerializer
 import json
@@ -74,10 +76,10 @@ def update_profile(request, profile_id):
         for profile in Profile.objects.filter(id=profile_id):
             for anime in payload["animes"]:
                 if (anime["delete"]):
-                    for remove_status in Status.objects.filter(profile=profile.id, anime=anime["id"]):
+                    for remove_status in AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"]):
                         remove_status.delete()
                 else:
-                    Status.objects.create(
+                    AnimeStatus.objects.create(
                         profile=profile,
                         anime=Anime.objects.get(id=anime["id"]),
                         favorite=anime["favorite"],
@@ -85,10 +87,10 @@ def update_profile(request, profile_id):
                     )
             for movie in payload["movies"]:
                 if (movie["delete"]):
-                    for remove_status in Status.objects.filter(profile=profile.id, movie=movie["id"]):
+                    for remove_status in MovieStatus.objects.filter(profile=profile.id, movie=movie["id"]):
                         remove_status.delete()
                 else:
-                    Status.objects.create(
+                    MovieStatus.objects.create(
                         profile=profile,
                         movie=Movie.objects.get(id=movie["id"]),
                         favorite=movie["favorite"],
@@ -96,10 +98,10 @@ def update_profile(request, profile_id):
                     )
             for manga in payload["mangas"]:
                 if (manga["delete"]):
-                    for remove_status in Status.objects.filter(profile=profile.id, manga=manga["id"]):
+                    for remove_status in MangaStatus.objects.filter(profile=profile.id, manga=manga["id"]):
                         remove_status.delete()
                 else:
-                    Status.objects.create(
+                    MangaStatus.objects.create(
                         profile=profile,
                         manga=Manga.objects.get(id=manga["id"]),
                         favorite=manga["favorite"],

@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from api.models.movie import Movie
-from api.serializers.status import StatusSerializer
+from api.serializers.moviestatus import MovieStatusSerializer
 
 class MovieSerializer(serializers.ModelSerializer):
-    status = StatusSerializer(many=True)
+    moviestatus = MovieStatusSerializer(many=True)
     class Meta:
         model = Movie
-        fields = ['id', 'genres', 'status', 'studio', 'director', 'title', 'description', 'release_date', 'image']
+        fields = ['id', 'genres', 'moviestatus', 'studio', 'director', 'title', 'description', 'release_date', 'image']
         depth = 2
