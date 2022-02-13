@@ -8,6 +8,8 @@ from api.models.social import Social
 from api.models.animestatus import AnimeStatus
 from api.models.mangastatus import MangaStatus
 from api.models.moviestatus import MovieStatus
+from api.models.chapterstatus import ChapterStatus
+from api.models.chapter import Chapter
 from django.contrib.auth.models import User
 from api.serializers.profile import ProfileSerializer
 import json
@@ -16,6 +18,9 @@ from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from rest_framework.response import Response
+
+
+from asgiref.sync import sync_to_async
 
 @api_view(["GET"])
 def get_profile(request, profile_id):
@@ -101,11 +106,18 @@ def update_profile(request, profile_id):
                     for remove_status in MangaStatus.objects.filter(profile=profile.id, manga=manga["id"]):
                         remove_status.delete()
                 else:
-                    MangaStatus.objects.create(
+                    mangastatus = MangaStatus.objects.create(
                         profile=profile,
                         manga=Manga.objects.get(id=manga["id"]),
                         favorite=manga["favorite"],
                         progress=manga["progress"],
+                    )
+
+                for chapter in manga["chapters"]:  
+                    ChapterStatus.objects.create(
+                        mangastatus=MangaStatus.objects.get(id=mangastatus.id),
+                        chapter=Chapter.objects.get(id=chapter["id"]),
+                        progress=chapter["progress"],
                     )
 
         for social in Social.objects.filter(id=profile_id):

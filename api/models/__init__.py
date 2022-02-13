@@ -10,3 +10,4 @@ from .social import Social
 from .animestatus import AnimeStatus
 from .mangastatus import MangaStatus
 from .moviestatus import MovieStatus
+from .chapterstatus import ChapterStatus
