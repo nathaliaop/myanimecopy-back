@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from api.models.anime import Anime
 from api.models.season import Season
+from api.models.episode import Episode
 from api.serializers.anime import AnimeSerializer
 import json
 from rest_framework import status
@@ -39,10 +40,16 @@ def create_anime(request):
         )
 
         for season in payload["seasons"]:
-            Season.objects.create(
+            add_season = Season.objects.create(
                 anime=anime,
                 number=season["number"],
             )
+            for episode in season["episodes"]:
+                Episode.objects.create(
+                    season=add_season,
+                    name=episode["name"],
+                    number=episode["number"],
+                )
 
         for genre in payload["genres"]:
             anime.genres.add(genre)

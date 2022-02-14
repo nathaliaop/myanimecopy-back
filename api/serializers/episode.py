@@ -4,5 +4,5 @@ from api.models.episode import Episode
 class EpisodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Episode
-        fields = ['id', 'season', 'name', 'number']
+        fields = ['id', 'name', 'number']
         depth = 2
