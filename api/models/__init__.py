@@ -12,3 +12,4 @@ from .mangastatus import MangaStatus
 from .moviestatus import MovieStatus
 from .chapterstatus import ChapterStatus
 from .seasonstatus import SeasonStatus
+from .episodestatus import EpisodeStatus
