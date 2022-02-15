@@ -8,6 +8,8 @@ from api.models.social import Social
 from api.models.animestatus import AnimeStatus
 from api.models.mangastatus import MangaStatus
 from api.models.moviestatus import MovieStatus
+from api.models.seasonstatus import SeasonStatus
+from api.models.season import Season
 from api.models.chapterstatus import ChapterStatus
 from api.models.chapter import Chapter
 from django.contrib.auth.models import User
@@ -18,9 +20,6 @@ from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from rest_framework.response import Response
-
-
-from asgiref.sync import sync_to_async
 
 @api_view(["GET"])
 def get_profile(request, profile_id):
@@ -85,12 +84,19 @@ def update_profile(request, profile_id):
                 remove_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
                 remove_status.delete()
             else:
-                AnimeStatus.objects.create(
+                animestatus = AnimeStatus.objects.create(
                     profile = profile,
                     anime=Anime.objects.get(id=anime["id"]),
                     favorite=anime["favorite"],
                     progress=anime["progress"],
                 )
+                for season in anime["seasons"]:
+                    SeasonStatus.objects.create(
+                        progress=season["progress"],
+                        animestatus=AnimeStatus.objects.get(id=animestatus.id),
+                        season=Season.objects.get(id=season["id"]),
+                    )
+
         for movie in payload["movies"]:
             if (movie["delete"]):
                 remove_status = MovieStatus.objects.get(profile=profile.id, movie=movie["id"])
@@ -102,6 +108,7 @@ def update_profile(request, profile_id):
                     favorite=movie["favorite"],
                     progress=movie["progress"],
                 )
+
         for manga in payload["mangas"]:
             if (manga["delete"]):
                 remove_status = MangaStatus.objects.get(profile=profile.id, manga=manga["id"])
