@@ -83,8 +83,9 @@ def update_profile(request, profile_id):
         profile = Profile.objects.get(id=profile_id)
         for anime in payload["animes"]:
             if (anime["delete"]):
-                remove_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
-                remove_status.delete()
+                if (AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])):
+                    remove_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
+                    remove_status.delete()
             elif (not AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])):
                 animestatus = AnimeStatus.objects.create(
                     profile = profile,
@@ -105,6 +106,13 @@ def update_profile(request, profile_id):
                             seasonstatus=SeasonStatus.objects.get(id=seasonstatus.id),
                             episode=Episode.objects.get(id=episode["id"]),
                         )
+            else: 
+                AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"]).update(
+                    profile = profile,
+                    anime=anime["id"],
+                    favorite=anime["favorite"],
+                    progress=anime["progress"],
+                )
 
 
         for movie in payload["movies"]:
