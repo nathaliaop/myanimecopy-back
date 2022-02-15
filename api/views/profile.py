@@ -85,7 +85,7 @@ def update_profile(request, profile_id):
             if (anime["delete"]):
                 remove_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
                 remove_status.delete()
-            else:
+            elif (not AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])):
                 animestatus = AnimeStatus.objects.create(
                     profile = profile,
                     anime=Anime.objects.get(id=anime["id"]),
