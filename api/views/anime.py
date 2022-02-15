@@ -47,7 +47,7 @@ def create_anime(request):
             for episode in season["episodes"]:
                 Episode.objects.create(
                     season=add_season,
-                    name=episode["name"],
+                    title=episode["title"],
                     number=episode["number"],
                 )
 

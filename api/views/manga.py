@@ -43,7 +43,7 @@ def create_manga(request):
             Chapter.objects.create(
                 manga=manga,
                 number=chapter["number"],
-                name=chapter["name"],
+                title=chapter["title"],
             )
 
 

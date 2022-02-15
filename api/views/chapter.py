@@ -32,7 +32,7 @@ def create_chapter(request):
     try:
         manga = Manga.objects.get(id=payload["manga"])
         chapter = Chapter.objects.create(
-            name=payload["name"],
+            title=payload["title"],
             number=payload["number"],
             manga=manga,
             #added_by=user,

@@ -8,4 +8,4 @@ class SeasonStatus(models.Model):
     season = models.ForeignKey(Season, related_name="seasonstatus", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Status {self.movie.title} from season {self.season.name}'
+        return f'Status from season {self.season.number} from anime {self.season.anime.title}'

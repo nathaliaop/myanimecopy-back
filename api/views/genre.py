@@ -30,7 +30,7 @@ def create_genre(request):
     payload = json.loads(request.body)
     try:
         genre = Genre.objects.create(
-            name=payload["name"],
+            title=payload["title"],
             #added_by=user,
         )
         serializer = GenreSerializer(genre)
