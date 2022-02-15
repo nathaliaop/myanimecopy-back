@@ -66,27 +66,22 @@ def create_profile(request):
 def update_profile(request, profile_id):
     payload = json.loads(request.body)
     try:
-        profile = Profile.objects.filter(id=profile_id)
-        social = Social.objects.get(id=profile_id)
-        user = User.objects.filter(id=profile_id)
-
-        profile.update(
+        Profile.objects.filter(id=profile_id).update(
             image=payload["image"],
         )
-
-        user.update(
+        User.objects.filter(id=profile_id).update(
             email=payload["email"],
             username=payload["username"],
             password=payload["password"],
         )
 
         profile = Profile.objects.get(id=profile_id)
+        social = Social.objects.get(id=profile_id)
         for anime in payload["animes"]:
-            if (anime["delete"]):
-                if (AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])):
-                    remove_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
-                    remove_status.delete()
-            elif (not AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])):
+            all_anime_status = AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])
+            if (anime["delete"] and all_anime_status):
+                all_anime_status.delete()
+            elif (not anime["delete"] and not all_anime_status):
                 animestatus = AnimeStatus.objects.create(
                     profile = profile,
                     anime=Anime.objects.get(id=anime["id"]),
@@ -107,7 +102,7 @@ def update_profile(request, profile_id):
                             episode=Episode.objects.get(id=episode["id"]),
                         )
             else: 
-                AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"]).update(
+                all_anime_status.update(
                     profile = profile,
                     anime=anime["id"],
                     favorite=anime["favorite"],
