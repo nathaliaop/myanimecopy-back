@@ -111,22 +111,29 @@ def update_profile(request, profile_id):
 
 
         for movie in payload["movies"]:
-            if (movie["delete"]):
-                remove_status = MovieStatus.objects.get(profile=profile.id, movie=movie["id"])
-                remove_status.delete()
-            else:
+            all_movie_status = MovieStatus.objects.filter(profile=profile.id, movie=movie["id"])
+            if (movie["delete"] and all_movie_status):
+                all_movie_status.delete()
+            elif (not movie["delete"] and not all_movie_status):
                 MovieStatus.objects.create(
                     profile = profile,
                     movie=Movie.objects.get(id=movie["id"]),
                     favorite=movie["favorite"],
                     progress=movie["progress"],
                 )
+            else:
+                all_movie_status.update(
+                    profile = profile,
+                    movie=movie["id"],
+                    favorite=movie["favorite"],
+                    progress=movie["progress"],
+                )
 
         for manga in payload["mangas"]:
-            if (manga["delete"]):
-                remove_status = MangaStatus.objects.get(profile=profile.id, manga=manga["id"])
-                remove_status.delete()
-            else:
+            all_manga_status = MangaStatus.objects.filter(profile=profile.id, manga=manga["id"])
+            if (manga["delete"] and all_manga_status):
+                all_manga_status.delete()
+            elif (not manga["delete"] and not all_manga_status):
                 mangastatus = MangaStatus.objects.create(
                     profile = profile,
                     manga=Manga.objects.get(id=manga["id"]),
@@ -134,11 +141,18 @@ def update_profile(request, profile_id):
                     progress=manga["progress"],
                 )
 
-            for chapter in manga["chapters"]:  
-                ChapterStatus.objects.create(
-                    mangastatus=MangaStatus.objects.get(id=mangastatus.id),
-                    chapter=Chapter.objects.get(id=chapter["id"]),
-                    progress=chapter["progress"],
+                for chapter in manga["chapters"]:  
+                    ChapterStatus.objects.create(
+                        mangastatus=MangaStatus.objects.get(id=mangastatus.id),
+                        chapter=Chapter.objects.get(id=chapter["id"]),
+                        progress=chapter["progress"],
+                    )
+            else:
+                all_manga_status.update(
+                    profile = profile,
+                    manga=manga["id"],
+                    favorite=manga["favorite"],
+                    progress=manga["progress"],
                 )
 
         for follower in payload["followers"]:
