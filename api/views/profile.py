@@ -79,7 +79,7 @@ def update_profile(request, profile_id):
         social = Social.objects.get(id=profile_id)
 
         # Adiciona animes ao perfil de usuário
-        for anime in payload["animes"]:
+        for anime in payload["animestatus"]:
             all_anime_status = AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])
             if (anime["delete"] and all_anime_status):
                 all_anime_status.delete()
@@ -94,7 +94,7 @@ def update_profile(request, profile_id):
                 all_anime_status.update(
                     favorite=anime["favorite"],
                 )
-            for season in anime["seasons"]:
+            for season in anime["seasonstatus"]:
                 all_anime_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
                 all_season_status = SeasonStatus.objects.filter(animestatus=all_anime_status.id, season=season["id"])
                 if (not all_season_status):
@@ -103,7 +103,7 @@ def update_profile(request, profile_id):
                         animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
                         season=Season.objects.get(id=season["id"]),
                     )
-                for episode in season["episodes"]:
+                for episode in season["episodestatus"]:
                     all_season_status = SeasonStatus.objects.get(animestatus=all_anime_status.id, season=season["id"])
                     all_episode_status = EpisodeStatus.objects.filter(seasonstatus=all_season_status.id, episode=episode["id"])
                     if (not all_episode_status):
@@ -149,7 +149,7 @@ def update_profile(request, profile_id):
 
 
         # Adiciona filmes ao perfil de usuário
-        for movie in payload["movies"]:
+        for movie in payload["moviestatus"]:
             all_movie_status = MovieStatus.objects.filter(profile=profile.id, movie=movie["id"])
             if (movie["delete"] and all_movie_status):
                 all_movie_status.delete()
@@ -167,7 +167,7 @@ def update_profile(request, profile_id):
                 )
 
         # Adiciona mangas ao perfil de usuário
-        for manga in payload["mangas"]:
+        for manga in payload["mangastatus"]:
             all_manga_status = MangaStatus.objects.filter(profile=profile.id, manga=manga["id"])
             if (manga["delete"] and all_manga_status):
                 all_manga_status.delete()
@@ -183,7 +183,7 @@ def update_profile(request, profile_id):
                     favorite=manga["favorite"],
                 )
 
-            for chapter in manga["chapters"]:
+            for chapter in manga["chapterstatus"]:
                 all_manga_status = MangaStatus.objects.get(profile=profile.id, manga=manga["id"])
                 all_chapter_status = ChapterStatus.objects.filter(mangastatus=all_manga_status.id, chapter=chapter["id"])
                 if (not all_chapter_status):
