@@ -77,6 +77,8 @@ def update_profile(request, profile_id):
 
         profile = Profile.objects.get(id=profile_id)
         social = Social.objects.get(id=profile_id)
+
+        # Adiciona animes ao perfil de usuário
         for anime in payload["animes"]:
             all_anime_status = AnimeStatus.objects.filter(profile=profile.id, anime=anime["id"])
             if (anime["delete"] and all_anime_status):
@@ -90,8 +92,6 @@ def update_profile(request, profile_id):
                 )
             else: 
                 all_anime_status.update(
-                    profile = profile,
-                    anime=anime["id"],
                     favorite=anime["favorite"],
                 )
             for season in anime["seasons"]:
@@ -103,33 +103,24 @@ def update_profile(request, profile_id):
                         animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
                         season=Season.objects.get(id=season["id"]),
                     )
-                else:
-                    all_season_status.update(
-                        animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
-                        season=Season.objects.get(id=all_season_status[0].id),
-                    )
                 for episode in season["episodes"]:
                     all_season_status = SeasonStatus.objects.get(animestatus=all_anime_status.id, season=season["id"])
                     all_episode_status = EpisodeStatus.objects.filter(seasonstatus=all_season_status.id, episode=episode["id"])
                     if (not all_episode_status):
-                        print('not episode')
                         EpisodeStatus.objects.create(
                             progress=episode["progress"],
                             seasonstatus=SeasonStatus.objects.get(id=all_season_status.id),
                             episode=Episode.objects.get(id=episode["id"]),
                         )
                     else:
-                        print('episode')
                         all_episode_status.update(
                             progress=episode["progress"],
-                            seasonstatus=SeasonStatus.objects.get(id=all_season_status.id),
-                            episode=Episode.objects.get(id=all_episode_status[0].id),
                         )
 
         #Calcula progresso do anime e das temporadas
         for animestatus in AnimeStatus.objects.filter(profile=profile.id):
-            progress_episode_in_anime = 0
-            qnt_episode_in_anime = 0
+            progress_episode = 0
+            qnt_episode = 0
 
             for seasonstatus in SeasonStatus.objects.filter(animestatus=animestatus.id):
                 season_watched = True
@@ -138,8 +129,8 @@ def update_profile(request, profile_id):
 
                     if (episodestatus.progress != 100):
                         season_watched = False
-                    progress_episode_in_anime += episodestatus.progress
-                    qnt_episode_in_anime += 1
+                    progress_episode += episodestatus.progress
+                    qnt_episode += 1
 
                 # Se todos os episódios foram assistidos, marca a temporada como assistida
                 if (season_watched):
@@ -153,11 +144,11 @@ def update_profile(request, profile_id):
 
             # Calcula progresso do anime
             AnimeStatus.objects.filter(profile=profile.id, anime=animestatus.anime.id).update(
-                progress=(progress_episode_in_anime/qnt_episode_in_anime),
+                progress=(progress_episode/qnt_episode),
             )
 
 
-
+        # Adiciona filmes ao perfil de usuário
         for movie in payload["movies"]:
             all_movie_status = MovieStatus.objects.filter(profile=profile.id, movie=movie["id"])
             if (movie["delete"] and all_movie_status):
@@ -171,37 +162,54 @@ def update_profile(request, profile_id):
                 )
             else:
                 all_movie_status.update(
-                    profile = profile,
-                    movie=movie["id"],
                     favorite=movie["favorite"],
                     progress=movie["progress"],
                 )
 
+        # Adiciona mangas ao perfil de usuário
         for manga in payload["mangas"]:
             all_manga_status = MangaStatus.objects.filter(profile=profile.id, manga=manga["id"])
             if (manga["delete"] and all_manga_status):
                 all_manga_status.delete()
             elif (not manga["delete"] and not all_manga_status):
-                mangastatus = MangaStatus.objects.create(
+                all_manga_status = MangaStatus.objects.create(
+                    progress=0,
                     profile = profile,
                     manga=Manga.objects.get(id=manga["id"]),
                     favorite=manga["favorite"],
-                    progress=manga["progress"],
                 )
-
-                for chapter in manga["chapters"]:  
-                    ChapterStatus.objects.create(
-                        mangastatus=MangaStatus.objects.get(id=mangastatus.id),
-                        chapter=Chapter.objects.get(id=chapter["id"]),
-                        progress=chapter["progress"],
-                    )
             else:
                 all_manga_status.update(
-                    profile = profile,
-                    manga=manga["id"],
                     favorite=manga["favorite"],
-                    progress=manga["progress"],
                 )
+
+            for chapter in manga["chapters"]:
+                all_manga_status = MangaStatus.objects.get(profile=profile.id, manga=manga["id"])
+                all_chapter_status = ChapterStatus.objects.filter(mangastatus=all_manga_status.id, chapter=chapter["id"])
+                if (not all_chapter_status):
+                    ChapterStatus.objects.create(
+                        progress=chapter["progress"],
+                        mangastatus=MangaStatus.objects.get(id=all_manga_status.id),
+                        chapter=Chapter.objects.get(id=chapter["id"]),
+                    )
+                else:
+                    all_chapter_status.update(
+                        progress=chapter["progress"],
+                    )
+
+        # Calcula o progresso do manga
+        for mangastatus in MangaStatus.objects.filter(profile=profile.id):
+            progress_chapter = 0
+            qnt_chapter = 0
+
+            for chapterstatus in ChapterStatus.objects.filter(mangastatus=mangastatus.id):
+                progress_chapter += chapterstatus.progress
+                qnt_chapter += 1
+
+            MangaStatus.objects.filter(profile=profile.id, manga=mangastatus.manga.id).update(
+                progress=(progress_chapter/qnt_chapter),
+            )
+
 
         for follower in payload["followers"]:
             if (follower["delete"]):
