@@ -96,31 +96,32 @@ def update_profile(request, profile_id):
                     progress=anime["progress"],
                 )
             for season in anime["seasons"]:
-                all_season_status = SeasonStatus.objects.filter(animestatus=all_anime_status[0].id, season=season["id"])
+                all_anime_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
+                all_season_status = SeasonStatus.objects.filter(animestatus=all_anime_status.id, season=season["id"])
                 if (not all_season_status):
                     all_season_status = SeasonStatus.objects.create(
                         progress=season["progress"],
-                        animestatus=AnimeStatus.objects.get(id=all_anime_status[0].id),
+                        animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
                         season=Season.objects.get(id=season["id"]),
                     )
-                    for episode in season["episodes"]:
+                    '''for episode in season["episodes"]:
                         EpisodeStatus.objects.create(
                             progress=episode["progress"],
                             seasonstatus=SeasonStatus.objects.get(id=all_season_status[0].id),
-                            episode=Episode.objects.get(id=episode["id"]),
-                        )
+                            episode=Episode.objects.get(id=all_episode_status[0].id),
+                        )'''
                 else:
                     all_season_status.update(
                         progress=season["progress"],
-                        animestatus=AnimeStatus.objects.get(id=all_anime_status[0].id),
+                        animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
                         season=Season.objects.get(id=all_season_status[0].id),
                     )
-                    for episode in season["episodes"]:
+                    '''for episode in season["episodes"]:
                         EpisodeStatus.objects.create(
                             progress=episode["progress"],
                             seasonstatus=SeasonStatus.objects.get(id=all_season_status[0].id),
                             episode=Episode.objects.get(id=episode["id"]),
-                        )
+                        )'''
 
 
         for movie in payload["movies"]:
