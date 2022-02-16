@@ -82,25 +82,12 @@ def update_profile(request, profile_id):
             if (anime["delete"] and all_anime_status):
                 all_anime_status.delete()
             elif (not anime["delete"] and not all_anime_status):
-                animestatus = AnimeStatus.objects.create(
+                all_anime_status = AnimeStatus.objects.create(
                     profile = profile,
                     anime=Anime.objects.get(id=anime["id"]),
                     favorite=anime["favorite"],
                     progress=anime["progress"],
                 )
-
-                for season in anime["seasons"]:
-                    seasonstatus = SeasonStatus.objects.create(
-                        progress=season["progress"],
-                        animestatus=AnimeStatus.objects.get(id=animestatus.id),
-                        season=Season.objects.get(id=season["id"]),
-                    )
-                    for episode in season["episodes"]:
-                        EpisodeStatus.objects.create(
-                            progress=episode["progress"],
-                            seasonstatus=SeasonStatus.objects.get(id=seasonstatus.id),
-                            episode=Episode.objects.get(id=episode["id"]),
-                        )
             else: 
                 all_anime_status.update(
                     profile = profile,
@@ -108,6 +95,32 @@ def update_profile(request, profile_id):
                     favorite=anime["favorite"],
                     progress=anime["progress"],
                 )
+            for season in anime["seasons"]:
+                all_season_status = SeasonStatus.objects.filter(animestatus=all_anime_status[0].id, season=season["id"])
+                if (not all_season_status):
+                    all_season_status = SeasonStatus.objects.create(
+                        progress=season["progress"],
+                        animestatus=AnimeStatus.objects.get(id=all_anime_status[0].id),
+                        season=Season.objects.get(id=season["id"]),
+                    )
+                    for episode in season["episodes"]:
+                        EpisodeStatus.objects.create(
+                            progress=episode["progress"],
+                            seasonstatus=SeasonStatus.objects.get(id=all_season_status[0].id),
+                            episode=Episode.objects.get(id=episode["id"]),
+                        )
+                else:
+                    all_season_status.update(
+                        progress=season["progress"],
+                        animestatus=AnimeStatus.objects.get(id=all_anime_status[0].id),
+                        season=Season.objects.get(id=all_season_status[0].id),
+                    )
+                    for episode in season["episodes"]:
+                        EpisodeStatus.objects.create(
+                            progress=episode["progress"],
+                            seasonstatus=SeasonStatus.objects.get(id=all_season_status[0].id),
+                            episode=Episode.objects.get(id=episode["id"]),
+                        )
 
 
         for movie in payload["movies"]:
