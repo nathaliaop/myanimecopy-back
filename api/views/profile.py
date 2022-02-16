@@ -83,30 +83,28 @@ def update_profile(request, profile_id):
                 all_anime_status.delete()
             elif (not anime["delete"] and not all_anime_status):
                 all_anime_status = AnimeStatus.objects.create(
+                    progress=0,
                     profile = profile,
                     anime=Anime.objects.get(id=anime["id"]),
                     favorite=anime["favorite"],
-                    progress=anime["progress"],
                 )
             else: 
                 all_anime_status.update(
                     profile = profile,
                     anime=anime["id"],
                     favorite=anime["favorite"],
-                    progress=anime["progress"],
                 )
             for season in anime["seasons"]:
                 all_anime_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
                 all_season_status = SeasonStatus.objects.filter(animestatus=all_anime_status.id, season=season["id"])
                 if (not all_season_status):
                     all_season_status = SeasonStatus.objects.create(
-                        progress=season["progress"],
+                        progress=0,
                         animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
                         season=Season.objects.get(id=season["id"]),
                     )
                 else:
                     all_season_status.update(
-                        progress=season["progress"],
                         animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
                         season=Season.objects.get(id=all_season_status[0].id),
                     )
@@ -114,17 +112,50 @@ def update_profile(request, profile_id):
                     all_season_status = SeasonStatus.objects.get(animestatus=all_anime_status.id, season=season["id"])
                     all_episode_status = EpisodeStatus.objects.filter(seasonstatus=all_season_status.id, episode=episode["id"])
                     if (not all_episode_status):
+                        print('not episode')
                         EpisodeStatus.objects.create(
                             progress=episode["progress"],
                             seasonstatus=SeasonStatus.objects.get(id=all_season_status.id),
                             episode=Episode.objects.get(id=episode["id"]),
                         )
                     else:
-                        EpisodeStatus.objects.update(
+                        print('episode')
+                        all_episode_status.update(
                             progress=episode["progress"],
                             seasonstatus=SeasonStatus.objects.get(id=all_season_status.id),
                             episode=Episode.objects.get(id=all_episode_status[0].id),
                         )
+
+        #Calcula progresso do anime e das temporadas
+        for animestatus in AnimeStatus.objects.filter(profile=profile.id):
+            progress_episode_in_anime = 0
+            qnt_episode_in_anime = 0
+
+            for seasonstatus in SeasonStatus.objects.filter(animestatus=animestatus.id):
+                season_watched = True
+
+                for episodestatus in EpisodeStatus.objects.filter(seasonstatus=seasonstatus.id):
+
+                    if (episodestatus.progress != 100):
+                        season_watched = False
+                    progress_episode_in_anime += episodestatus.progress
+                    qnt_episode_in_anime += 1
+
+                # Se todos os episódios foram assistidos, marca a temporada como assistida
+                if (season_watched):
+                    SeasonStatus.objects.filter(animestatus=animestatus.id, season=seasonstatus.season.id).update(
+                        progress= 100,
+                    )
+                else:
+                     SeasonStatus.objects.filter(animestatus=animestatus.id, season=seasonstatus.season.id).update(
+                         progress=0,
+                    )
+
+            # Calcula progresso do anime
+            AnimeStatus.objects.filter(profile=profile.id, anime=animestatus.anime.id).update(
+                progress=(progress_episode_in_anime/qnt_episode_in_anime),
+            )
+
 
 
         for movie in payload["movies"]:
