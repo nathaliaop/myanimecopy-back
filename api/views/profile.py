@@ -94,28 +94,30 @@ def update_profile(request, profile_id):
                 all_anime_status.update(
                     favorite=anime["favorite"],
                 )
-            for season in anime["seasonstatus"]:
-                all_anime_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
-                all_season_status = SeasonStatus.objects.filter(animestatus=all_anime_status.id, season=season["id"])
-                if (not all_season_status):
-                    all_season_status = SeasonStatus.objects.create(
-                        progress=0,
-                        animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
-                        season=Season.objects.get(id=season["id"]),
-                    )
-                for episode in season["episodestatus"]:
-                    all_season_status = SeasonStatus.objects.get(animestatus=all_anime_status.id, season=season["id"])
-                    all_episode_status = EpisodeStatus.objects.filter(seasonstatus=all_season_status.id, episode=episode["id"])
-                    if (not all_episode_status):
-                        EpisodeStatus.objects.create(
-                            progress=episode["progress"],
-                            seasonstatus=SeasonStatus.objects.get(id=all_season_status.id),
-                            episode=Episode.objects.get(id=episode["id"]),
+            
+            if (not anime["delete"]):
+                for season in anime["seasonstatus"]:
+                    all_anime_status = AnimeStatus.objects.get(profile=profile.id, anime=anime["id"])
+                    all_season_status = SeasonStatus.objects.filter(animestatus=all_anime_status.id, season=season["id"])
+                    if (not all_season_status):
+                        all_season_status = SeasonStatus.objects.create(
+                            progress=0,
+                            animestatus=AnimeStatus.objects.get(id=all_anime_status.id),
+                            season=Season.objects.get(id=season["id"]),
                         )
-                    else:
-                        all_episode_status.update(
-                            progress=episode["progress"],
-                        )
+                    for episode in season["episodestatus"]:
+                        all_season_status = SeasonStatus.objects.get(animestatus=all_anime_status.id, season=season["id"])
+                        all_episode_status = EpisodeStatus.objects.filter(seasonstatus=all_season_status.id, episode=episode["id"])
+                        if (not all_episode_status):
+                            EpisodeStatus.objects.create(
+                                progress=episode["progress"],
+                                seasonstatus=SeasonStatus.objects.get(id=all_season_status.id),
+                                episode=Episode.objects.get(id=episode["id"]),
+                            )
+                        else:
+                            all_episode_status.update(
+                                progress=episode["progress"],
+                            )
 
         #Calcula progresso do anime e das temporadas
         for animestatus in AnimeStatus.objects.filter(profile=profile.id):
@@ -183,19 +185,20 @@ def update_profile(request, profile_id):
                     favorite=manga["favorite"],
                 )
 
-            for chapter in manga["chapterstatus"]:
-                all_manga_status = MangaStatus.objects.get(profile=profile.id, manga=manga["id"])
-                all_chapter_status = ChapterStatus.objects.filter(mangastatus=all_manga_status.id, chapter=chapter["id"])
-                if (not all_chapter_status):
-                    ChapterStatus.objects.create(
-                        progress=chapter["progress"],
-                        mangastatus=MangaStatus.objects.get(id=all_manga_status.id),
-                        chapter=Chapter.objects.get(id=chapter["id"]),
-                    )
-                else:
-                    all_chapter_status.update(
-                        progress=chapter["progress"],
-                    )
+            if (not manga["delete"]):
+                for chapter in manga["chapterstatus"]:
+                    all_manga_status = MangaStatus.objects.get(profile=profile.id, manga=manga["id"])
+                    all_chapter_status = ChapterStatus.objects.filter(mangastatus=all_manga_status.id, chapter=chapter["id"])
+                    if (not all_chapter_status):
+                        ChapterStatus.objects.create(
+                            progress=chapter["progress"],
+                            mangastatus=MangaStatus.objects.get(id=all_manga_status.id),
+                            chapter=Chapter.objects.get(id=chapter["id"]),
+                        )
+                    else:
+                        all_chapter_status.update(
+                            progress=chapter["progress"],
+                        )
 
         # Calcula o progresso do manga
         for mangastatus in MangaStatus.objects.filter(profile=profile.id):

@@ -13,3 +13,10 @@ from .moviestatus import MovieStatus
 from .chapterstatus import ChapterStatus
 from .seasonstatus import SeasonStatus
 from .episodestatus import EpisodeStatus
+
+genre_list= ["adventure", "action", "drama", "mecha"]
+
+for title in genre_list:
+    Genre.objects.get_or_create(
+        title=title
+    )
