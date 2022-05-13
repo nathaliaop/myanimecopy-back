@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from api.models.manga import Manga
+from api.models import Manga
 from api.serializers.manga import MangaSerializer
 
 class MangaViewSet(viewsets.ModelViewSet):

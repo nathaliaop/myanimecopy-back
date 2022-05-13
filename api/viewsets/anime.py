@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from api.models.anime import Anime
+from api.models import Anime
 from api.serializers.anime import AnimeSerializer
 
 class AnimeViewSet(viewsets.ModelViewSet):

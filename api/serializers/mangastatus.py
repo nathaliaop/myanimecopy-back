@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.mangastatus import MangaStatus
+from api.models import MangaStatus
 from api.serializers.chapterstatus import ChapterStatusSerializer
 
 class MangaStatusSerializer(serializers.ModelSerializer):

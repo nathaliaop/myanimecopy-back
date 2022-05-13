@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from api.models.genre import Genre
+from api.models import Genre
 from api.serializers.genre import GenreSerializer
 
 class GenreViewSet(viewsets.ModelViewSet):

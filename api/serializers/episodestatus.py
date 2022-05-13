@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.episodestatus import EpisodeStatus
+from api.models import EpisodeStatus
 
 class EpisodeStatusSerializer(serializers.ModelSerializer):
     class Meta:

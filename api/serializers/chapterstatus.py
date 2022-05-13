@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.chapterstatus import ChapterStatus
+from api.models import ChapterStatus
 
 class ChapterStatusSerializer(serializers.ModelSerializer):
     class Meta:

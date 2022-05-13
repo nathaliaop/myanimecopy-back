@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.seasonstatus import SeasonStatus
+from api.models import SeasonStatus
 from api.serializers.episodestatus import EpisodeStatusSerializer
 
 class SeasonStatusSerializer(serializers.ModelSerializer):

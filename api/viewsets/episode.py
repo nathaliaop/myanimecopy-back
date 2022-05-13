@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from api.models.episode import Episode
+from api.models import Episode
 
 from api.serializers.episode import EpisodeSerializer
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.genre import Genre
+from api.models import Genre
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:

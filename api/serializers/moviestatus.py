@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.moviestatus import MovieStatus
+from api.models import MovieStatus
 
 class MovieStatusSerializer(serializers.ModelSerializer):
     class Meta:

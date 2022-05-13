@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.episode import Episode
+from api.models import Episode
 
 class EpisodeSerializer(serializers.ModelSerializer):
     class Meta:

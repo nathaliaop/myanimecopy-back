@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.profile import Profile
+from api.models import Profile
 from api.serializers.animestatus import AnimeStatusSerializer
 from api.serializers.mangastatus import MangaStatusSerializer
 from api.serializers.moviestatus import MovieStatusSerializer

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.season import Season
+from api.models import Season
 from api.serializers.episode import EpisodeSerializer
 
 class SeasonSerializer(serializers.ModelSerializer):

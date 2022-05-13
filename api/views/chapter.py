@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
-from api.models.chapter import Chapter
-from api.models.manga import Manga
+from api.models import Chapter
+from api.models import Manga
 from api.serializers.chapter import ChapterSerializer
 import json
 from rest_framework import status
